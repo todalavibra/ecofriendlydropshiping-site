@@ -6,11 +6,19 @@ import { ArrowRight, Truck, ShieldCheck, Heart } from "lucide-react";
 import { products } from "./data/products";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CartSidebar from "@/components/CartSidebar";
+import { useCartStore } from "@/store/cartStore";
 
 export default function Home() {
+  const { addItem, openCart } = useCartStore();
 
-  const handleAddToCart = (productName: string, value: number) => {
-    console.log(`Added ${productName} to cart`);
+  const handleAddToCart = (productId: string, productName: string, productPrice: number, productImage: string) => {
+    addItem({
+      id: productId,
+      name: productName,
+      price: productPrice,
+      image: productImage
+    });
 
     // Push event to dataLayer for GTM
     if (typeof window !== 'undefined') {
@@ -19,19 +27,23 @@ export default function Home() {
         event: 'add_to_cart',
         ecommerce: {
           currency: 'USD',
-          value: value,
+          value: productPrice,
           items: [{
             item_name: productName,
-            price: value
+            price: productPrice
           }]
         }
       });
     }
+
+    // Open cart sidebar
+    openCart();
   };
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-800 font-sans">
       <Navbar />
+      <CartSidebar />
 
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
@@ -117,7 +129,7 @@ export default function Home() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        handleAddToCart(product.name, product.price);
+                        handleAddToCart(product.id, product.name, product.price, product.image);
                       }}
                       className="text-emerald-600 font-medium hover:text-emerald-800 hover:bg-emerald-50 px-3 py-1 rounded-lg transition-colors"
                     >

@@ -1,10 +1,14 @@
+"use client";
+
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { products } from "@/app/data/products";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import CartSidebar from "@/components/CartSidebar";
 import { Check, Truck, ShieldCheck, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useCartStore } from "@/store/cartStore";
 
 // Helper to find product
 const getProduct = (id: string) => {
@@ -20,14 +24,26 @@ export function generateStaticParams() {
 
 export default function ProductPage({ params }: { params: { id: string } }) {
     const product = getProduct(params.id);
+    const { addItem, openCart } = useCartStore();
 
     if (!product) {
         notFound();
     }
 
+    const handleAddToCart = () => {
+        addItem({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image
+        });
+        openCart();
+    };
+
     return (
         <div className="min-h-screen bg-stone-50 text-stone-800 font-sans">
             <Navbar />
+            <CartSidebar />
 
             <div className="container mx-auto px-4 py-12">
                 <Link href="/#products" className="inline-flex items-center text-stone-500 hover:text-emerald-700 mb-8 transition-colors">
@@ -78,7 +94,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                         </div>
 
                         <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                            <button className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white text-lg font-semibold py-4 rounded-full transition-all transform hover:scale-[1.02] shadow-md hover:shadow-lg">
+                            <button
+                                onClick={handleAddToCart}
+                                className="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white text-lg font-semibold py-4 rounded-full transition-all transform hover:scale-[1.02] shadow-md hover:shadow-lg"
+                            >
                                 Add to Cart
                             </button>
                         </div>
