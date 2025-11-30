@@ -1,6 +1,11 @@
+"use client";
+
 import Image from "next/image";
-import { ArrowRight, Leaf, Truck, ShieldCheck, Heart } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Truck, ShieldCheck, Heart } from "lucide-react";
 import { products } from "./data/products";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export default function Home() {
 
@@ -26,22 +31,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-800 font-sans">
-      {/* Navigation */}
-      <nav className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-stone-100">
-        <div className="text-2xl font-bold text-emerald-800 flex items-center gap-2">
-          <Leaf className="w-6 h-6" />
-          EcoDrop
-        </div>
-        <button className="bg-emerald-700 hover:bg-emerald-800 text-white px-5 py-2 rounded-full transition-colors text-sm font-medium">
-          Shop Now
-        </button>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="relative h-[80vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/30 z-10" />
-          {/* Placeholder for hero image */}
           <div className="w-full h-full bg-emerald-900" />
           <Image
             src="https://images.unsplash.com/photo-1542601906990-b4d3fb7d5fa5?q=80&w=2626&auto=format&fit=crop"
@@ -95,12 +90,16 @@ export default function Home() {
       </section>
 
       {/* Product Showcase */}
-      <section className="py-20 bg-stone-100">
+      <section id="products" className="py-20 bg-stone-100">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-12 text-emerald-950">Trending Now</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {products.map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col">
+              <Link
+                key={product.id}
+                href={`/products/${product.id}`}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all group flex flex-col"
+              >
                 <div className="relative h-64 bg-stone-200 overflow-hidden">
                   <Image
                     src={product.image}
@@ -116,14 +115,17 @@ export default function Home() {
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-stone-100">
                     <span className="text-lg font-bold text-emerald-700">${product.price.toFixed(2)}</span>
                     <button
-                      onClick={() => handleAddToCart(product.name, product.price)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAddToCart(product.name, product.price);
+                      }}
                       className="text-emerald-600 font-medium hover:text-emerald-800 hover:bg-emerald-50 px-3 py-1 rounded-lg transition-colors"
                     >
                       Add to Cart
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -188,41 +190,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter / Footer */}
-      <footer className="bg-emerald-950 text-emerald-100 py-16">
-        <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <div className="text-2xl font-bold text-white flex items-center gap-2 mb-4">
-              <Leaf className="w-6 h-6" />
-              EcoDrop
-            </div>
-            <p className="max-w-sm text-emerald-200/80">
-              Making sustainable living accessible to everyone. Join us in our mission to protect the planet, one purchase at a time.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-bold text-white mb-4">Shop</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">All Products</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Best Sellers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">New Arrivals</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Gift Cards</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-white mb-4">Company</h4>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Sustainability</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Shipping & Returns</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="container mx-auto px-4 mt-12 pt-8 border-t border-emerald-900 text-center text-sm text-emerald-400">
-          © {new Date().getFullYear()} EcoDrop. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
