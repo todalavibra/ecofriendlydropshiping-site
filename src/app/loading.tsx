@@ -1,3 +1,11 @@
+/**
+ * The global loading component.
+ *
+ * This component is automatically shown by Next.js while page content is loading.
+ * It displays a spinning loader animation.
+ *
+ * @returns The Loading component.
+ */
 export default function Loading() {
     return (
         <div className="min-h-screen bg-stone-50 flex items-center justify-center">

@@ -9,9 +9,32 @@ import Footer from "@/components/Footer";
 import CartSidebar from "@/components/CartSidebar";
 import { useCartStore } from "@/store/cartStore";
 
+/**
+ * The Home page component.
+ *
+ * This is the main landing page of the application. It features:
+ * - A hero section with a call to action.
+ * - Trust signals (shipping, sustainability, giving back).
+ * - A grid of trending eco-friendly products.
+ * - Customer testimonials.
+ *
+ * It interacts with the `CartStore` to add items to the cart and track events via Google Tag Manager.
+ *
+ * @returns The Home page component.
+ */
 export default function Home() {
   const { addItem, openCart } = useCartStore();
 
+  /**
+   * Handles adding a product to the shopping cart.
+   *
+   * It updates the cart state and pushes an 'add_to_cart' event to the GTM data layer.
+   *
+   * @param productId - The unique identifier of the product.
+   * @param productName - The name of the product.
+   * @param productPrice - The price of the product.
+   * @param productImage - The URL of the product image.
+   */
   const handleAddToCart = (productId: string, productName: string, productPrice: number, productImage: string) => {
     addItem({
       id: productId,

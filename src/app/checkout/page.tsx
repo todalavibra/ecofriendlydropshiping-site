@@ -9,6 +9,18 @@ import Footer from "@/components/Footer";
 import { useCartStore } from "@/store/cartStore";
 import { useRouter } from "next/navigation";
 
+/**
+ * The Checkout page component.
+ *
+ * This page allows users to review their order, enter shipping and payment information,
+ * and complete their purchase. It includes:
+ * - A multi-step form for contact, shipping, and payment details.
+ * - Real-time form validation.
+ * - An order summary section displaying cart items and totals.
+ * - Integration with the `CartStore` to retrieve cart data and clear the cart upon successful payment.
+ *
+ * @returns The Checkout page component.
+ */
 export default function CheckoutPage() {
     const router = useRouter();
     const { items, getTotalPrice, clearCart } = useCartStore();
@@ -28,6 +40,14 @@ export default function CheckoutPage() {
         cvv: ""
     });
 
+    /**
+     * Validates the checkout form fields.
+     *
+     * Checks for valid email format, ZIP code length, card number length,
+     * expiry date format, and CVV length. Updates the `errors` state object.
+     *
+     * @returns `true` if the form is valid, `false` otherwise.
+     */
     const validateForm = () => {
         const newErrors: Record<string, string> = {};
 
@@ -60,6 +80,14 @@ export default function CheckoutPage() {
         return Object.keys(newErrors).length === 0;
     };
 
+    /**
+     * Handles the form submission.
+     *
+     * Validates the form, simulates a payment processing delay, clears the cart,
+     * and redirects the user to the success page.
+     *
+     * @param e - The form submission event.
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 

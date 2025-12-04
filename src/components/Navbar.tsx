@@ -5,6 +5,14 @@ import { Leaf, ShoppingCart, Menu, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import { useState } from "react";
 
+/**
+ * Navbar component.
+ *
+ * Renders the top navigation bar with the logo, navigation links, and cart toggle.
+ * It is responsive, showing a hamburger menu on smaller screens.
+ *
+ * @returns The Navbar component.
+ */
 export default function Navbar() {
     const { getTotalItems, openCart } = useCartStore();
     const itemCount = getTotalItems();

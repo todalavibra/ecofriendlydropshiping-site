@@ -1,8 +1,18 @@
 import { act } from '@testing-library/react';
 import { useCartStore } from '../cartStore';
 
+/**
+ * Test suite for the Cart Store.
+ *
+ * Tests the functionality of the Zustand store used for managing the shopping cart,
+ * including adding items, removing items, updating quantities, clearing the cart,
+ * and calculating totals.
+ */
+
 // Mock persist middleware
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 jest.mock('zustand/middleware', () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   persist: (config: any) => (set: any, get: any, api: any) => config(set, get, api),
 }));
 

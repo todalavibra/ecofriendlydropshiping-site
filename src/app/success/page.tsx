@@ -3,6 +3,15 @@ import { CheckCircle, Package, Leaf } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+/**
+ * The Order Success page component.
+ *
+ * This page is displayed after a successful checkout. It confirms the order,
+ * highlights the positive environmental impact (e.g., tree planting), and
+ * provides navigation options to return to the shop or home page.
+ *
+ * @returns The Success page component.
+ */
 export default function SuccessPage() {
     return (
         <div className="min-h-screen bg-stone-50">

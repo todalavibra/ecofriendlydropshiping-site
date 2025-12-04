@@ -5,6 +5,14 @@ import { X, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
 import Link from "next/link";
 
+/**
+ * CartSidebar component.
+ *
+ * Renders a sliding sidebar that displays the items in the shopping cart.
+ * Allows users to view items, update quantities, remove items, and proceed to checkout.
+ *
+ * @returns The CartSidebar component or null if not open.
+ */
 export default function CartSidebar() {
     const { items, isOpen, closeCart, updateQuantity, removeItem, getTotalPrice } = useCartStore();
 

@@ -10,11 +10,26 @@ import { Check, Truck, ShieldCheck, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useCartStore } from "@/store/cartStore";
 
-// Helper to find product
+/**
+ * Finds a product by its ID.
+ *
+ * @param id - The unique identifier of the product.
+ * @returns The product object if found, otherwise undefined.
+ */
 const getProduct = (id: string) => {
     return products.find((p) => p.id === id);
 };
 
+/**
+ * The Product Detail page component.
+ *
+ * This page displays detailed information about a specific product, including
+ * its image, description, price, features, and an "Add to Cart" button.
+ * It uses the `useParams` hook to retrieve the product ID from the URL.
+ * If the product is not found, it redirects to the 404 page.
+ *
+ * @returns The Product Detail page component.
+ */
 export default function ProductPage() {
     const params = useParams();
     const productId = params.id as string;
@@ -25,6 +40,11 @@ export default function ProductPage() {
         notFound();
     }
 
+    /**
+     * Handles adding the current product to the cart.
+     *
+     * Adds the product to the store and opens the cart sidebar.
+     */
     const handleAddToCart = () => {
         addItem({
             id: product.id,

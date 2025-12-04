@@ -1,6 +1,21 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
+/**
+ * Handles POST requests for sending order confirmation emails.
+ *
+ * This route expects a JSON body containing order details:
+ * - `email`: The customer's email address.
+ * - `firstName`: The customer's first name.
+ * - `lastName`: The customer's last name.
+ * - `items`: An array of items purchased.
+ * - `total`: The total amount of the order.
+ *
+ * It uses the Resend API to send a formatted HTML email to the customer.
+ *
+ * @param request - The incoming HTTP request.
+ * @returns A JSON response indicating success or failure.
+ */
 export async function POST(request: Request) {
   try {
     // Initialize Resend only at runtime

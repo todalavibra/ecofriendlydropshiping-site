@@ -1,12 +1,25 @@
+/**
+ * Represents a product in the eco-friendly store.
+ */
 export interface Product {
+    /** The unique identifier for the product. */
     id: string;
+    /** The display name of the product. */
     name: string;
+    /** A detailed description of the product. */
     description: string;
+    /** The price of the product in USD. */
     price: number;
+    /** The URL of the product image. */
     image: string;
+    /** The category the product belongs to (e.g., 'Personal Care', 'Kitchen'). */
     category: string;
 }
 
+/**
+ * A static list of eco-friendly products available in the store.
+ * This simulates a database of products.
+ */
 export const products: Product[] = [
     {
         id: "p1",
