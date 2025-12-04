@@ -4,6 +4,14 @@ import Link from "next/link";
 import { Home, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+/**
+ * The 404 Not Found page component.
+ *
+ * Renders a user-friendly error message when a requested page does not exist.
+ * Provides options to navigate back to the home page or the previous page.
+ *
+ * @returns The Not Found page component.
+ */
 export default function NotFound() {
     const router = useRouter();
     return (

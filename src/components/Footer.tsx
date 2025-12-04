@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { Leaf } from "lucide-react";
 
+/**
+ * Footer component.
+ *
+ * Renders the footer of the application, including the logo, mission statement,
+ * navigation links for shopping and company information, and copyright notice.
+ *
+ * @returns The Footer component.
+ */
 export default function Footer() {
     return (
         <footer className="bg-emerald-950 text-emerald-100 py-16">

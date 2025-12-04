@@ -2,12 +2,20 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import CartSidebar from '../CartSidebar';
 import { useCartStore } from '../../store/cartStore';
 
+/**
+ * Test suite for the CartSidebar component.
+ *
+ * Tests the visibility of the sidebar, rendering of empty and populated states,
+ * and user interactions such as updating quantities, removing items, and closing the cart.
+ */
+
 // Mock the store
 jest.mock('../../store/cartStore');
 
 // Mock Image component since it's hard to test in jsdom
 jest.mock('next/image', () => ({
     __esModule: true,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, jsx-a11y/alt-text, @next/next/no-img-element
     default: (props: any) => <img {...props} />,
 }));
 

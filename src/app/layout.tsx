@@ -5,6 +5,9 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
+/**
+ * Metadata for the application, including SEO tags and Open Graph information.
+ */
 export const metadata: Metadata = {
     title: "EcoDrop | Sustainable Living & Eco-Friendly Products",
     description: "Discover a curated collection of eco-friendly, zero-waste, and sustainable products. Shop responsibly for a greener future with EcoDrop.",
@@ -32,6 +35,16 @@ export const metadata: Metadata = {
     },
 };
 
+/**
+ * The root layout component for the application.
+ *
+ * This component wraps all pages and provides the base HTML structure,
+ * global font styles, and Google Tag Manager integration.
+ *
+ * @param props - Component properties.
+ * @param props.children - The child components (pages) to be rendered.
+ * @returns The root layout structure.
+ */
 export default function RootLayout({
     children,
 }: Readonly<{

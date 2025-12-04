@@ -3,6 +3,15 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Leaf, Globe, Recycle } from "lucide-react";
 
+/**
+ * The About page component.
+ *
+ * This page describes the mission, story, and core values of the EcoDrop brand.
+ * It features a hero section, a narrative about the company's origins, and a
+ * section detailing the core values of sustainability, circular economy, and global impact.
+ *
+ * @returns The About page component.
+ */
 export default function About() {
     return (
         <div className="min-h-screen bg-stone-50 text-stone-800 font-sans">

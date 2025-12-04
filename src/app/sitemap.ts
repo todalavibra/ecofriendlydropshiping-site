@@ -1,5 +1,13 @@
 import { MetadataRoute } from 'next';
 
+/**
+ * Generates the sitemap for the application.
+ *
+ * This function returns a list of URLs that should be indexed by search engines,
+ * along with their modification frequency and priority.
+ *
+ * @returns A sitemap object compatible with Next.js MetadataRoute.Sitemap.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://ecofriendlydropshipping.com';
 

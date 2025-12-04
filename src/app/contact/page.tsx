@@ -5,9 +5,25 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 
+/**
+ * The Contact page component.
+ *
+ * This page provides users with contact information (email, phone, address) and
+ * a contact form to send messages to the support team.
+ * It also includes a brief FAQ section.
+ *
+ * @returns The Contact page component.
+ */
 export default function ContactPage() {
     const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
+    /**
+     * Handles the contact form submission.
+     *
+     * Simulates a network request and updates the form status to show a success message.
+     *
+     * @param e - The form submission event.
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setFormStatus('submitting');
