@@ -22,8 +22,10 @@ export default function Home() {
 
     // Push event to dataLayer for GTM
     if (typeof window !== 'undefined') {
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const w = window as any;
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push({
         event: 'add_to_cart',
         ecommerce: {
           currency: 'USD',
@@ -163,7 +165,7 @@ export default function Home() {
               <div className="flex text-yellow-400 mb-4">
                 {"★★★★★".split("").map((star, i) => <span key={i}>{star}</span>)}
               </div>
-              <p className="text-emerald-100 mb-6 italic">"I love my bamboo essentials kit! The quality is amazing and it feels so good to finally ditch plastic toothbrushes. Shipping was super fast too."</p>
+              <p className="text-emerald-100 mb-6 italic">&quot;I love my bamboo essentials kit! The quality is amazing and it feels so good to finally ditch plastic toothbrushes. Shipping was super fast too.&quot;</p>
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-900 font-bold">SJ</div>
                 <div>
@@ -176,7 +178,7 @@ export default function Home() {
               <div className="flex text-yellow-400 mb-4">
                 {"★★★★★".split("").map((star, i) => <span key={i}>{star}</span>)}
               </div>
-              <p className="text-emerald-100 mb-6 italic">"The thermal bottle is a game changer. Keeps my water ice cold all day, even in the hot sun. Highly recommend EcoDrop for sustainable finds."</p>
+              <p className="text-emerald-100 mb-6 italic">&quot;The thermal bottle is a game changer. Keeps my water ice cold all day, even in the hot sun. Highly recommend EcoDrop for sustainable finds.&quot;</p>
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-900 font-bold">MR</div>
                 <div>
@@ -189,7 +191,7 @@ export default function Home() {
               <div className="flex text-yellow-400 mb-4">
                 {"★★★★★".split("").map((star, i) => <span key={i}>{star}</span>)}
               </div>
-              <p className="text-emerald-100 mb-6 italic">"Finally, a store that actually cares about packaging! Everything came in compostable mailers. Will definitely be ordering again."</p>
+              <p className="text-emerald-100 mb-6 italic">&quot;Finally, a store that actually cares about packaging! Everything came in compostable mailers. Will definitely be ordering again.&quot;</p>
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-emerald-200 rounded-full flex items-center justify-center text-emerald-900 font-bold">EL</div>
                 <div>

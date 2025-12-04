@@ -6,8 +6,30 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "EcoDrop | Sustainable Living",
-    description: "Eco-friendly dropshipping store for sustainable products.",
+    title: "EcoDrop | Sustainable Living & Eco-Friendly Products",
+    description: "Discover a curated collection of eco-friendly, zero-waste, and sustainable products. Shop responsibly for a greener future with EcoDrop.",
+    keywords: ["eco-friendly", "sustainable", "zero waste", "plastic free", "organic", "bamboo", "dropshipping"],
+    openGraph: {
+        title: "EcoDrop | Sustainable Living",
+        description: "Shop the best eco-friendly products for a sustainable lifestyle.",
+        url: "https://ecofriendlydropshipping.com",
+        siteName: "EcoDrop",
+        images: [
+            {
+                url: "https://images.unsplash.com/photo-1542601906990-b4d3fb7d5fa5?q=80&w=2626&auto=format&fit=crop",
+                width: 1200,
+                height: 630,
+            },
+        ],
+        locale: "en_US",
+        type: "website",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "EcoDrop | Sustainable Living",
+        description: "Shop the best eco-friendly products for a sustainable lifestyle.",
+        images: ["https://images.unsplash.com/photo-1542601906990-b4d3fb7d5fa5?q=80&w=2626&auto=format&fit=crop"],
+    },
 };
 
 export default function RootLayout({

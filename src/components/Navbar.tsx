@@ -18,6 +18,7 @@ export default function Navbar() {
                 <Link href="/" className="hover:text-emerald-700 transition-colors">Home</Link>
                 <Link href="/about" className="hover:text-emerald-700 transition-colors">About</Link>
                 <Link href="/#products" className="hover:text-emerald-700 transition-colors">Shop</Link>
+                <Link href="/contact" className="hover:text-emerald-700 transition-colors">Contact</Link>
             </div>
             <div className="flex items-center gap-4">
                 <button

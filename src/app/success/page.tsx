@@ -14,7 +14,7 @@ export default function SuccessPage() {
                         <CheckCircle className="w-24 h-24 text-emerald-600 mx-auto mb-6" />
                         <h1 className="text-4xl font-bold text-stone-900 mb-4">Order Confirmed!</h1>
                         <p className="text-xl text-stone-600 mb-2">Thank you for your purchase</p>
-                        <p className="text-stone-500">You'll receive a confirmation email shortly.</p>
+                        <p className="text-stone-500">You&apos;ll receive a confirmation email shortly.</p>
                     </div>
 
                     <div className="bg-white rounded-2xl p-8 mb-8">
@@ -30,7 +30,7 @@ export default function SuccessPage() {
                                 <Leaf className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-1" />
                                 <div>
                                     <h3 className="font-semibold text-stone-900 mb-1">Tree Planted</h3>
-                                    <p className="text-sm text-stone-600">We've planted a tree on your behalf!</p>
+                                    <p className="text-sm text-stone-600">We&apos;ve planted a tree on your behalf!</p>
                                 </div>
                             </div>
                         </div>
