@@ -1,0 +1,219 @@
+﻿
+> ecofriendlydropshipping-site@0.1.0 build
+> next build
+
+   Γû▓ Next.js 16.0.6 (Turbopack)
+
+   Creating an optimized production build ...
+node.exe : 
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:\U
+sers\roanc\AppData\Roaming\ 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
+    + CategoryInfo          
+    : NotSpecified: (:Stri  
+  ng) [], RemoteException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+> Build error occurred
+Error: Turbopack build 
+failed with 1 errors:
+./src/app/products/[id]/page
+.tsx:19:8
+Next.js can't recognize the 
+exported 
+`generateStaticParams` 
+field in route. App pages 
+cannot use both "use 
+client" and export function 
+"generateStaticParams()".
+[0m [90m 17 |[39m
+ [90m 18 |[39m [90m// 
+Generate static params for 
+all products[39m
+[31m[1m>[22m[39m[90m 
+19 |[39m [36mexport[39m 
+[36mfunction[39m 
+generateStaticParams() {
+ [90m    |[39m        [31
+m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1
+m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[31
+m[1m^[22m[39m[31m[1m^[
+22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1
+m^[22m[39m
+[31m[1m>[22m[39m[90m 
+20 |[39m     
+[36mreturn[39m products[3
+3m.[39mmap((product) 
+[33m=>[39m ({
+ [90m    |[39m [31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m
+[31m[1m>[22m[39m[90m 
+21 |[39m         
+id[33m:[39m product[33m.
+[39mid[33m,[39m
+ [90m    |[39m [31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m
+[31m[1m>[22m[39m[90m 
+22 |[39m     }))[33m;[39m
+ [90m    |[39m [31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m[31m[1m^[22m
+[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^
+[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[
+1m^[22m[39m
+[31m[1m>[22m[39m[90m 
+23 |[39m }
+ [90m    |[39m [31m[1m^
+[22m[39m[31m[1m^[22m[39
+m
+ [90m 24 |[39m
+ [90m 25 |[39m 
+[36mexport[39m 
+[36mdefault[39m 
+[36mfunction[39m 
+[33mProductPage[39m({ 
+params }[33m:[39m { 
+params[33m:[39m { 
+id[33m:[39m string } }) {
+ [90m 26 |[39m     
+[36mconst[39m product 
+[33m=[39m getProduct(param
+s[33m.[39mid)[33m;[39m[
+0m
+
+The exported configuration 
+object in a source file 
+needs to have a very 
+specific format from which 
+some properties can be 
+statically parsed at 
+compiled-time.
+
+Import traces:
+  Client Component Browser:
+    ./src/app/products/[id]/
+page.tsx [Client Component 
+Browser]
+    ./src/app/products/[id]/
+page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/products/[id]/
+page.tsx [Client Component 
+SSR]
+    ./src/app/products/[id]/
+page.tsx [Server Component]
+
+https://nextjs.org/docs/app/
+api-reference/file-conventio
+ns/route-segment-config
+
+
+    at <unknown> (./src/app/
+products/[id]/page.tsx:19:8)
+    at <unknown> (https://ne
+xtjs.org/docs/app/api-refere
+nce/file-conventions/route-s
+egment-config)

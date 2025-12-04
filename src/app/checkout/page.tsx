@@ -13,6 +13,7 @@ export default function CheckoutPage() {
     const router = useRouter();
     const { items, getTotalPrice, clearCart } = useCartStore();
     const [isProcessing, setIsProcessing] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const [formData, setFormData] = useState({
         email: "",
@@ -27,8 +28,45 @@ export default function CheckoutPage() {
         cvv: ""
     });
 
+    const validateForm = () => {
+        const newErrors: Record<string, string> = {};
+
+        // Email validation
+        if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            newErrors.email = "Please enter a valid email address";
+        }
+
+        // ZIP code validation
+        if (!formData.zip.match(/^\d{5}$/)) {
+            newErrors.zip = "ZIP code must be 5 digits";
+        }
+
+        // Card number validation (basic)
+        if (!formData.cardNumber.match(/^\d{16}$/)) {
+            newErrors.cardNumber = "Card number must be 16 digits";
+        }
+
+        // Expiry validation
+        if (!formData.expiry.match(/^(0[1-9]|1[0-2])\/\d{2}$/)) {
+            newErrors.expiry = "Format: MM/YY";
+        }
+
+        // CVV validation
+        if (!formData.cvv.match(/^\d{3,4}$/)) {
+            newErrors.cvv = "CVV must be 3-4 digits";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
         setIsProcessing(true);
 
         // Simulate payment processing
@@ -82,8 +120,10 @@ export default function CheckoutPage() {
                                     required
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
+                                        }`}
                                 />
+                                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                             </div>
 
                             {/* Shipping Address */}
@@ -132,14 +172,18 @@ export default function CheckoutPage() {
                                         onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                                         className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     />
-                                    <input
-                                        type="text"
-                                        placeholder="ZIP"
-                                        required
-                                        value={formData.zip}
-                                        onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder="ZIP"
+                                            required
+                                            value={formData.zip}
+                                            onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
+                                            className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 w-full ${errors.zip ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
+                                                }`}
+                                        />
+                                        {errors.zip && <p className="text-red-500 text-xs mt-1">{errors.zip}</p>}
+                                    </div>
                                 </div>
                             </div>
 
@@ -153,27 +197,40 @@ export default function CheckoutPage() {
                                     type="text"
                                     placeholder="Card Number"
                                     required
+                                    maxLength={16}
                                     value={formData.cardNumber}
-                                    onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value })}
-                                    className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value.replace(/\D/g, '') })}
+                                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.cardNumber ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
+                                        }`}
                                 />
+                                {errors.cardNumber && <p className="text-red-500 text-sm mt-1">{errors.cardNumber}</p>}
                                 <div className="grid grid-cols-2 gap-4 mt-4">
-                                    <input
-                                        type="text"
-                                        placeholder="MM/YY"
-                                        required
-                                        value={formData.expiry}
-                                        onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="CVV"
-                                        required
-                                        value={formData.cvv}
-                                        onChange={(e) => setFormData({ ...formData, cvv: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder="MM/YY"
+                                            required
+                                            maxLength={5}
+                                            value={formData.expiry}
+                                            onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
+                                            className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 w-full ${errors.expiry ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
+                                                }`}
+                                        />
+                                        {errors.expiry && <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>}
+                                    </div>
+                                    <div>
+                                        <input
+                                            type="text"
+                                            placeholder="CVV"
+                                            required
+                                            maxLength={4}
+                                            value={formData.cvv}
+                                            onChange={(e) => setFormData({ ...formData, cvv: e.target.value.replace(/\D/g, '') })}
+                                            className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 w-full ${errors.cvv ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
+                                                }`}
+                                        />
+                                        {errors.cvv && <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>}
+                                    </div>
                                 </div>
                             </div>
 

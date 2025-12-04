@@ -1,18 +1,19 @@
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
-    try {
-        const body = await request.json();
-        const { email, firstName, lastName, items, total } = body;
+  try {
+    // Initialize Resend only at runtime
+    const resend = new Resend(process.env.RESEND_API_KEY || 'dummy_key_for_build');
 
-        const { data, error } = await resend.emails.send({
-            from: 'EcoDrop <orders@ecofriendlydropshipping.com>',
-            to: [email],
-            subject: 'Order Confirmation - EcoDrop',
-            html: `
+    const body = await request.json();
+    const { email, firstName, lastName, items, total } = body;
+
+    const { data, error } = await resend.emails.send({
+      from: 'EcoDrop <orders@ecofriendlydropshipping.com>',
+      to: [email],
+      subject: 'Order Confirmation - EcoDrop',
+      html: `
         <!DOCTYPE html>
         <html>
           <head>
@@ -57,14 +58,14 @@ export async function POST(request: Request) {
           </body>
         </html>
       `,
-        });
+    });
 
-        if (error) {
-            return NextResponse.json({ error }, { status: 500 });
-        }
-
-        return NextResponse.json({ success: true, data });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ error }, { status: 500 });
     }
+
+    return NextResponse.json({ success: true, data });
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
+  }
 }

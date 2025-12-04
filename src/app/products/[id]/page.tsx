@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { products } from "@/app/data/products";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,15 +15,10 @@ const getProduct = (id: string) => {
     return products.find((p) => p.id === id);
 };
 
-// Generate static params for all products
-export function generateStaticParams() {
-    return products.map((product) => ({
-        id: product.id,
-    }));
-}
-
-export default function ProductPage({ params }: { params: { id: string } }) {
-    const product = getProduct(params.id);
+export default function ProductPage() {
+    const params = useParams();
+    const productId = params.id as string;
+    const product = getProduct(productId);
     const { addItem, openCart } = useCartStore();
 
     if (!product) {
