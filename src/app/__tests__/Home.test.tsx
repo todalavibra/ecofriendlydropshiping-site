@@ -13,13 +13,6 @@ import { useCartStore } from '@/store/cartStore';
 // Mock the store
 jest.mock('@/store/cartStore');
 
-// Mock Image
-jest.mock('next/image', () => ({
-    __esModule: true,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, jsx-a11y/alt-text, @next/next/no-img-element
-    default: (props: any) => <img {...props} />,
-}));
-
 describe('Home Page', () => {
     const mockUseCartStore = useCartStore as unknown as jest.Mock;
     const mockAddItem = jest.fn();
