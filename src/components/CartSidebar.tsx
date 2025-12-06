@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
@@ -15,6 +16,13 @@ import Link from "next/link";
  */
 export default function CartSidebar() {
     const { items, isOpen, closeCart, updateQuantity, removeItem, getTotalPrice } = useCartStore();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
 
     if (!isOpen) return null;
 

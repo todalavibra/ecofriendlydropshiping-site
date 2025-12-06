@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Leaf, ShoppingCart, Menu, X } from "lucide-react";
 import { useCartStore } from "@/store/cartStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * Navbar component.
@@ -15,8 +15,12 @@ import { useState } from "react";
  */
 export default function Navbar() {
     const { getTotalItems, openCart } = useCartStore();
-    const itemCount = getTotalItems();
+    const [itemCount, setItemCount] = useState(0);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    useEffect(() => {
+        setItemCount(getTotalItems());
+    }, [getTotalItems]);
 
     return (
         <>

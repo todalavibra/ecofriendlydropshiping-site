@@ -7,102 +7,65 @@ import { ArrowLeft, CreditCard, Lock } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCartStore } from "@/store/cartStore";
-import { useRouter } from "next/navigation";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 /**
- * The Checkout page component.
+ * The Checkout page component with Stripe integration.
  *
- * This page allows users to review their order, enter shipping and payment information,
- * and complete their purchase. It includes:
- * - A multi-step form for contact, shipping, and payment details.
- * - Real-time form validation.
- * - An order summary section displaying cart items and totals.
- * - Integration with the `CartStore` to retrieve cart data and clear the cart upon successful payment.
+ * This page allows users to review their order and complete their purchase using Stripe.
+ * It displays cart items, totals, and a button to proceed to Stripe checkout.
  *
  * @returns The Checkout page component.
  */
 export default function CheckoutPage() {
-    const router = useRouter();
-    const { items, getTotalPrice, clearCart } = useCartStore();
+    const { items, getTotalPrice } = useCartStore();
     const [isProcessing, setIsProcessing] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-
-    const [formData, setFormData] = useState({
-        email: "",
-        firstName: "",
-        lastName: "",
-        address: "",
-        city: "",
-        state: "",
-        zip: "",
-        cardNumber: "",
-        expiry: "",
-        cvv: ""
-    });
+    const [error, setError] = useState<string | null>(null);
 
     /**
-     * Validates the checkout form fields.
-     *
-     * Checks for valid email format, ZIP code length, card number length,
-     * expiry date format, and CVV length. Updates the `errors` state object.
-     *
-     * @returns `true` if the form is valid, `false` otherwise.
+     * Handles the Stripe checkout process.
+     * Creates a checkout session and redirects to Stripe.
      */
-    const validateForm = () => {
-        const newErrors: Record<string, string> = {};
-
-        // Email validation
-        if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            newErrors.email = "Please enter a valid email address";
-        }
-
-        // ZIP code validation
-        if (!formData.zip.match(/^\d{5}$/)) {
-            newErrors.zip = "ZIP code must be 5 digits";
-        }
-
-        // Card number validation (basic)
-        if (!formData.cardNumber.match(/^\d{16}$/)) {
-            newErrors.cardNumber = "Card number must be 16 digits";
-        }
-
-        // Expiry validation
-        if (!formData.expiry.match(/^(0[1-9]|1[0-2])\/\d{2}$/)) {
-            newErrors.expiry = "Format: MM/YY";
-        }
-
-        // CVV validation
-        if (!formData.cvv.match(/^\d{3,4}$/)) {
-            newErrors.cvv = "CVV must be 3-4 digits";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
-
-    /**
-     * Handles the form submission.
-     *
-     * Validates the form, simulates a payment processing delay, clears the cart,
-     * and redirects the user to the success page.
-     *
-     * @param e - The form submission event.
-     */
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
+    const handleStripeCheckout = async () => {
         setIsProcessing(true);
+        setError(null);
 
-        // Simulate payment processing
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            // Create checkout session
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ items }),
+            });
 
-        clearCart();
-        setIsProcessing(false);
-        router.push("/success");
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create checkout session');
+            }
+
+            // Redirect to Stripe Checkout
+            const stripe = await stripePromise;
+            if (!stripe) {
+                throw new Error('Stripe failed to load');
+            }
+
+            const { error: stripeError } = await stripe.redirectToCheckout({
+                sessionId: data.sessionId,
+            });
+
+            if (stripeError) {
+                throw new Error(stripeError.message);
+            }
+        } catch (err: any) {
+            console.error('Checkout error:', err);
+            setError(err.message || 'Something went wrong. Please try again.');
+            setIsProcessing(false);
+        }
     };
 
     if (items.length === 0) {
@@ -134,147 +97,80 @@ export default function CheckoutPage() {
                 </Link>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    {/* Checkout Form */}
+                    {/* Checkout Info */}
                     <div>
-                        <h1 className="text-3xl font-bold text-stone-900 mb-8">Checkout</h1>
+                        <h1 className="text-3xl font-bold text-stone-900 mb-8">Secure Checkout</h1>
 
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            {/* Contact Information */}
-                            <div>
-                                <h2 className="text-xl font-semibold text-stone-900 mb-4">Contact Information</h2>
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    required
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
-                                        }`}
-                                />
-                                {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                        <div className="bg-white rounded-2xl p-8 mb-6">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center">
+                                    <CreditCard className="w-6 h-6 text-emerald-700" />
+                                </div>
+                                <div>
+                                    <h2 className="text-xl font-semibold text-stone-900">Payment with Stripe</h2>
+                                    <p className="text-sm text-stone-600">Secure payment processing</p>
+                                </div>
                             </div>
 
-                            {/* Shipping Address */}
-                            <div>
-                                <h2 className="text-xl font-semibold text-stone-900 mb-4">Shipping Address</h2>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <input
-                                        type="text"
-                                        placeholder="First Name"
-                                        required
-                                        value={formData.firstName}
-                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Last Name"
-                                        required
-                                        value={formData.lastName}
-                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
-                                </div>
-                                <input
-                                    type="text"
-                                    placeholder="Address"
-                                    required
-                                    value={formData.address}
-                                    onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                                    className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 mt-4"
-                                />
-                                <div className="grid grid-cols-3 gap-4 mt-4">
-                                    <input
-                                        type="text"
-                                        placeholder="City"
-                                        required
-                                        value={formData.city}
-                                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="State"
-                                        required
-                                        value={formData.state}
-                                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                                        className="px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                                    />
+                            <div className="space-y-4 mb-6">
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-emerald-700 text-sm font-bold">✓</span>
+                                    </div>
                                     <div>
-                                        <input
-                                            type="text"
-                                            placeholder="ZIP"
-                                            required
-                                            value={formData.zip}
-                                            onChange={(e) => setFormData({ ...formData, zip: e.target.value })}
-                                            className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 w-full ${errors.zip ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
-                                                }`}
-                                        />
-                                        {errors.zip && <p className="text-red-500 text-xs mt-1">{errors.zip}</p>}
+                                        <h3 className="font-semibold text-stone-900">Secure Payment</h3>
+                                        <p className="text-sm text-stone-600">Your payment information is encrypted and secure</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-emerald-700 text-sm font-bold">✓</span>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-stone-900">Fast Checkout</h3>
+                                        <p className="text-sm text-stone-600">Complete your purchase in just a few clicks</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <div className="w-6 h-6 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                        <span className="text-emerald-700 text-sm font-bold">✓</span>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-semibold text-stone-900">Multiple Payment Methods</h3>
+                                        <p className="text-sm text-stone-600">Credit cards, debit cards, and more</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Payment Information */}
-                            <div>
-                                <h2 className="text-xl font-semibold text-stone-900 mb-4 flex items-center gap-2">
-                                    <CreditCard className="w-5 h-5" />
-                                    Payment Information
-                                </h2>
-                                <input
-                                    type="text"
-                                    placeholder="Card Number"
-                                    required
-                                    maxLength={16}
-                                    value={formData.cardNumber}
-                                    onChange={(e) => setFormData({ ...formData, cardNumber: e.target.value.replace(/\D/g, '') })}
-                                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.cardNumber ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
-                                        }`}
-                                />
-                                {errors.cardNumber && <p className="text-red-500 text-sm mt-1">{errors.cardNumber}</p>}
-                                <div className="grid grid-cols-2 gap-4 mt-4">
-                                    <div>
-                                        <input
-                                            type="text"
-                                            placeholder="MM/YY"
-                                            required
-                                            maxLength={5}
-                                            value={formData.expiry}
-                                            onChange={(e) => setFormData({ ...formData, expiry: e.target.value })}
-                                            className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 w-full ${errors.expiry ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
-                                                }`}
-                                        />
-                                        {errors.expiry && <p className="text-red-500 text-xs mt-1">{errors.expiry}</p>}
-                                    </div>
-                                    <div>
-                                        <input
-                                            type="text"
-                                            placeholder="CVV"
-                                            required
-                                            maxLength={4}
-                                            value={formData.cvv}
-                                            onChange={(e) => setFormData({ ...formData, cvv: e.target.value.replace(/\D/g, '') })}
-                                            className={`px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 w-full ${errors.cvv ? 'border-red-500 focus:ring-red-500' : 'border-stone-300 focus:ring-emerald-500'
-                                                }`}
-                                        />
-                                        {errors.cvv && <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>}
-                                    </div>
+                            {error && (
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                                    <p className="text-red-800 text-sm">{error}</p>
                                 </div>
-                            </div>
+                            )}
 
                             <button
-                                type="submit"
+                                onClick={handleStripeCheckout}
                                 disabled={isProcessing}
                                 className="w-full bg-emerald-700 hover:bg-emerald-800 disabled:bg-stone-400 text-white py-4 rounded-full font-semibold transition-colors flex items-center justify-center gap-2"
                             >
                                 <Lock className="w-5 h-5" />
-                                {isProcessing ? "Processing..." : `Pay $${getTotalPrice().toFixed(2)}`}
+                                {isProcessing ? "Processing..." : `Pay $${getTotalPrice().toFixed(2)} with Stripe`}
                             </button>
 
-                            <p className="text-xs text-stone-500 text-center">
-                                🔒 Your payment information is secure and encrypted
+                            <p className="text-xs text-stone-500 text-center mt-4">
+                                🔒 Powered by Stripe - Your payment information is secure
                             </p>
-                        </form>
+                        </div>
+
+                        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6">
+                            <h3 className="font-semibold text-emerald-900 mb-2">Why Stripe?</h3>
+                            <ul className="text-sm text-emerald-800 space-y-1">
+                                <li>• Trusted by millions of businesses worldwide</li>
+                                <li>• Bank-level security and encryption</li>
+                                <li>• Fast and reliable payment processing</li>
+                                <li>• Buyer protection included</li>
+                            </ul>
+                        </div>
                     </div>
 
                     {/* Order Summary */}
